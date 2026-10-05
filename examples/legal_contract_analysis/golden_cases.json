@@ -1,0 +1,18 @@
+[
+  {
+    "case_id": "termination-001",
+    "query": "Can either party terminate for convenience?",
+    "expected_source_ids": ["msa-42:12.4"],
+    "forbidden_source_ids": ["finance-only:7.1"],
+    "expected_label": "termination_for_convenience",
+    "must_abstain": false
+  },
+  {
+    "case_id": "missing-001",
+    "query": "Does the contract contain a source-code escrow clause?",
+    "expected_source_ids": [],
+    "forbidden_source_ids": [],
+    "expected_label": null,
+    "must_abstain": true
+  }
+]

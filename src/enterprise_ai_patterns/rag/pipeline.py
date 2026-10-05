@@ -1,10 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import uuid
+
 
 @dataclass(frozen=True)
 class Caller:
     user_id: str
     groups: tuple[str, ...]
+
 
 @dataclass(frozen=True)
 class Chunk:
@@ -12,6 +14,10 @@ class Chunk:
     text: str
     allowed_groups: tuple[str, ...]
     source_uri: str
+    retrieval_score: float = 0.0
+    rerank_score: float | None = None
+    metadata: dict[str, str] = field(default_factory=dict)
+
 
 @dataclass(frozen=True)
 class Answer:
@@ -19,7 +25,9 @@ class Answer:
     citations: tuple[str, ...]
     trace_id: str
 
+
 def answer_question(*, caller, query, retriever, reranker, generator, trace_sink):
+    """Compact reference flow retained for interview-sized examples."""
     trace_id = str(uuid.uuid4())
     candidates = retriever.search(query, limit=20)
     permitted = [

@@ -9,12 +9,14 @@ description = "Reference implementations for governed enterprise AI systems"
 requires-python = ">=3.11"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "pytest-cov>=5.0"]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "sqlglot>=26"]
+sql = ["sqlglot>=26"]
 rerank = ["sentence-transformers>=5,<6"]
 mcp = ["mcp>=2,<3", "anyio>=4"]
 all = [
   "pytest>=8.0",
   "pytest-cov>=5.0",
+  "sqlglot>=26",
   "sentence-transformers>=5,<6",
   "mcp>=2,<3",
   "anyio>=4",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+import uuid
 
 from enterprise_ai_patterns.agents.tool_registry import (
     ToolCallResult,
@@ -55,5 +56,5 @@ class MCPToolProvider:
             return ToolCallResult(
                 ok=not result.is_error,
                 data=data,
-                operation_id=f"mcp:{name}",
+                operation_id=f"mcp:{name}:{uuid.uuid4()}",
             )

@@ -8,3 +8,17 @@ htmlcov/
 dist/
 build/
 .vscode/
+hidden/
+
+# Local credentials and secrets
+.env
+.env.*
+!.env.example
+hidden/
+**/hidden/
+
+# Generated agent evaluation reports
+examples/enterprise_agent_workflows/manufacturing_orders/runs/
+
+# Local copies and backups
+* - Copy.py

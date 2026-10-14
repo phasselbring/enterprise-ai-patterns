@@ -7,11 +7,11 @@ from enterprise_ai_patterns.rag.reranker import TokenOverlapReranker
 
 
 class Retriever:
-    def search(self, query, *, limit=20):
-        return [
+    def search(self, query, *, limit=20, caller):
+        return [c for c in [
             Chunk("term", "Either party may terminate with thirty days written notice.", ("legal",), "contract://msa-42/12.4", retrieval_score=0.5),
             Chunk("secret", "Restricted finance terms.", ("finance",), "contract://secret", retrieval_score=0.9),
-        ]
+        ] if set(caller.groups).intersection(c.allowed_groups)]
 
 
 class Generator:

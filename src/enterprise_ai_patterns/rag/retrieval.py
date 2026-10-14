@@ -4,11 +4,11 @@ from dataclasses import replace
 from typing import Mapping, Protocol
 
 from .hybrid_search import Hit, reciprocal_rank_fusion
-from .pipeline import Chunk
+from .pipeline import Caller, Chunk
 
 
 class RankedIndex(Protocol):
-    def search(self, query: str, *, limit: int) -> list[Hit]: ...
+    def search(self, query: str, *, limit: int, allowed_ids: frozenset[str]) -> list[Hit]: ...
 
 
 class HybridRetriever:
@@ -27,11 +27,17 @@ class HybridRetriever:
         self._chunks = chunks
         self._fusion_k = fusion_k
 
-    def search(self, query: str, *, limit: int = 20) -> list[Chunk]:
-        # Over-fetch each inexpensive first-stage retriever, then fuse rankings.
+    def search(self, query: str, *, limit: int = 20, caller: Caller) -> list[Chunk]:
+        # Fail closed: compute visibility before ranking/candidate truncation.
+        allowed_ids = frozenset(cid for cid, chunk in self._chunks.items()
+                                if set(caller.groups).intersection(chunk.allowed_groups))
+        if not allowed_ids:
+            return []
+        # Index adapters MUST implement allowed_ids filtering inside the search backend.
+        # Filtering after top-k is insufficient (authorized results could be starved).
         first_stage_limit = max(limit * 2, limit)
-        keyword = self._keyword_index.search(query, limit=first_stage_limit)
-        vector = self._vector_index.search(query, limit=first_stage_limit)
+        keyword = self._keyword_index.search(query, limit=first_stage_limit, allowed_ids=allowed_ids)
+        vector = self._vector_index.search(query, limit=first_stage_limit, allowed_ids=allowed_ids)
         fused = reciprocal_rank_fusion(
             keyword,
             vector,
@@ -42,6 +48,6 @@ class HybridRetriever:
         results: list[Chunk] = []
         for hit in fused:
             chunk = self._chunks.get(hit.chunk_id)
-            if chunk is not None:
+            if chunk is not None and hit.chunk_id in allowed_ids:
                 results.append(replace(chunk, retrieval_score=hit.score))
         return results

@@ -6,4 +6,4 @@ def test_context_builder_deduplicates_chunks():
     chunk = Chunk("c1", "text", ("legal",), "x://1")
     bundle = ContextBuilder(max_chars=100).build([chunk, chunk])
     assert [c.chunk_id for c in bundle.chunks] == ["c1"]
-    assert "[c1]" in bundle.rendered
+    assert 'source_id="c1"' in bundle.rendered

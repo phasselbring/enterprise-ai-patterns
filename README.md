@@ -97,3 +97,9 @@ Optional reranker support:
 ```bash
 python -m pip install -e ".[rerank]"
 ```
+
+## Enterprise manufacturing agent
+
+[Run the multi-provider MCP manufacturing example](examples/enterprise_agent_workflows/manufacturing_orders/README.md). It uses synthetic data and supports OpenAI, Claude, and Gemini. See the linked architecture walkthrough for security limitations.
+
+**Security notes:** New reference retrieval adapters must honor caller ACLs **before** top-k. The SQLite idempotency result store provides persistence but is not an exactly-once side-effect executor. Model-consumed retrieval evidence remains untrusted.

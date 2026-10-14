@@ -1,0 +1,8 @@
+{
+  "name": "manufacturing-shortage",
+  "prompt": "Investigate SO-1001 and report the shortage and delay.",
+  "caller_id": "demo-user",
+  "expected_text": ["22", "12"],
+  "forbidden_tools": ["send_customer_message", "modify_inventory"],
+  "allowed_tools": ["lookup_order", "check_inventory_shortage"]
+}

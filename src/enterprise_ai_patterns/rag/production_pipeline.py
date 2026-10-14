@@ -51,14 +51,14 @@ class ProductionRAGPipeline:
         # Query expansion can improve recall. Merge candidates across rewrites/decompositions.
         candidate_by_id: dict[str, Chunk] = {}
         for retrieval_query in plan.retrieval_queries:
-            for chunk in self._retriever.search(retrieval_query, limit=20):
+            for chunk in self._retriever.search(retrieval_query, limit=20, caller=caller):
                 current = candidate_by_id.get(chunk.chunk_id)
                 if current is None or chunk.retrieval_score > current.retrieval_score:
                     candidate_by_id[chunk.chunk_id] = chunk
 
         candidates = list(candidate_by_id.values())
 
-        # Hard security boundary. In production push this filter down into the search service too.
+        # Defense in depth: check again after ACL-aware retrieval, never rely on the LLM.
         permitted = [
             chunk for chunk in candidates
             if set(caller.groups).intersection(chunk.allowed_groups)

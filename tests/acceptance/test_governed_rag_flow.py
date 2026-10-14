@@ -1,11 +1,11 @@
 from enterprise_ai_patterns.rag.pipeline import Caller, Chunk, answer_question
 
 class Retriever:
-    def search(self, query, *, limit=20):
-        return [
+    def search(self, query, *, limit=20, caller):
+        return [c for c in [
             Chunk("allowed", "Florida customer count is 2.", ("sales",), "synthetic://allowed"),
             Chunk("forbidden", "Restricted finance data.", ("finance",), "synthetic://forbidden"),
-        ]
+        ] if set(caller.groups).intersection(c.allowed_groups)]
 
 class Reranker:
     def rerank(self, query, chunks, *, limit=6):

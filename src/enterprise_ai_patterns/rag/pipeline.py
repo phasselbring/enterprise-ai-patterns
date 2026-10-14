@@ -29,7 +29,7 @@ class Answer:
 def answer_question(*, caller, query, retriever, reranker, generator, trace_sink):
     """Compact reference flow retained for interview-sized examples."""
     trace_id = str(uuid.uuid4())
-    candidates = retriever.search(query, limit=20)
+    candidates = retriever.search(query, limit=20, caller=caller)
     permitted = [
         c for c in candidates
         if set(caller.groups).intersection(c.allowed_groups)

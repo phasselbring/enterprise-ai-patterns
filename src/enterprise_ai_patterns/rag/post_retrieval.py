@@ -28,7 +28,11 @@ class ContextBuilder:
         for chunk in chunks:
             if chunk.chunk_id in seen:
                 continue
-            block = f"[{chunk.chunk_id}] {chunk.text.strip()}"
+            # Source text is data, not instructions. Structural tags aid the model but
+            # are NOT a substitute for independent tool authorization.
+            safe_text = chunk.text.strip().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            safe_id = chunk.chunk_id.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;")
+            block = f'<untrusted_evidence source_id="{safe_id}">\n{safe_text}\n</untrusted_evidence>'
             cost = len(block) + (len(separator) if rendered_parts else 0)
             if used + cost > self._max_chars:
                 # Skip, don't stop: a single oversized chunk must not starve every chunk after it.

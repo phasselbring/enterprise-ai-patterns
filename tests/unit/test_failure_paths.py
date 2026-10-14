@@ -61,8 +61,13 @@ def test_async_denial_approval_and_verification_fail_closed():
 
 def test_pipeline_rejects_fabricated_source_id():
     class Retriever:
-        def search(self, query, *, limit=20):
-            return [Chunk("real", "evidence", ("legal",), "x://real")]
+        def search(self, query, *, limit=20, caller):
+            assert caller.user_id == "u1"
+            assert "legal" in caller.groups
+
+            return [
+                Chunk("real", "evidence", ("legal",), "x://real")
+            ]
     class Reranker:
         def rerank(self, query, chunks, *, limit=6): return list(chunks)
     class Generator:

@@ -56,7 +56,7 @@ Relevant code:
 - `agents/state.py` — explicit session/task state
 - `agents/tool_registry.py` — local or remote tool discovery/invocation
 - `agents/governed_tool_call.py` — policy, approval, idempotency, verification, audit
-- `agents/loop.py` — bounded model-driven control loop
+- `agents/loop.py` — bounded model-driven control loop (failure handling and session rules: `docs/agent_harness.md`)
 
 ### MCP
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Awaitable, Callable, Protocol
+import uuid
 
 
 @dataclass(frozen=True)
@@ -47,7 +48,7 @@ class LocalToolProvider:
         if handler is None:
             return ToolCallResult(False, {"error": "unknown tool"}, f"local:{name}:missing")
         data = await handler(arguments)
-        return ToolCallResult(True, data, f"local:{name}")
+        return ToolCallResult(True, data, f"local:{name}:{uuid.uuid4()}")
 
 
 class ToolRegistry:

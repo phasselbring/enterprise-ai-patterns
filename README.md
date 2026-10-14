@@ -16,7 +16,7 @@ parse -> structure -> chunk -> metadata/ACL -> lexical + vector indexes
 
 QUERY TIME
 query
-  -> pre-retrieval planning / rewrite / routing
+  -> deterministic planning / optional domain decomposition and allowlisted routing
   -> hybrid retrieval (lexical + dense)
   -> rank fusion
   -> authorization / metadata filtering
@@ -29,7 +29,8 @@ query
 
 Relevant code:
 
-- `rag/pre_retrieval.py` — query normalization, decomposition/routing hooks
+- `rag/pre_retrieval.py` — basic whitespace normalization and injectable hooks; optional `RuleBasedQueryPlanner` implements bounded manufacturing decomposition, intent labels, and metadata extraction
+- `rag/routing.py` — optional allowlisted source dispatch with caller and metadata forwarded to backend ACL enforcement
 - `rag/hybrid_search.py` — reciprocal-rank fusion
 - `rag/retrieval.py` — first-stage hybrid retrieval
 - `rag/reranker.py` — deterministic reranker plus optional cross-encoder adapter

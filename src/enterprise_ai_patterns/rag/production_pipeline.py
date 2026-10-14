@@ -34,6 +34,7 @@ class ProductionRAGPipeline:
         generator,
         grounding_checker: GroundingChecker,
         trace_sink,
+        router=None,
     ) -> None:
         self._planner = planner
         self._retriever = retriever
@@ -42,6 +43,7 @@ class ProductionRAGPipeline:
         self._generator = generator
         self._grounding_checker = grounding_checker
         self._trace_sink = trace_sink
+        self._router = router
 
     def run(self, *, caller: Caller, query: str) -> ProductionAnswer:
         trace_id = str(uuid.uuid4())
@@ -50,8 +52,18 @@ class ProductionRAGPipeline:
 
         # Query expansion can improve recall. Merge candidates across rewrites/decompositions.
         candidate_by_id: dict[str, Chunk] = {}
-        for retrieval_query in plan.retrieval_queries:
-            for chunk in self._retriever.search(retrieval_query, limit=20, caller=caller):
+        routed = (self._planner.routed_queries(plan)
+                  if self._router is not None else ())
+        if self._router is not None and not routed:
+            raise ValueError("Configured router requires a planner with routed_queries()")
+        for index, retrieval_query in enumerate(plan.retrieval_queries):
+            # Source selection is deterministic; the selected backend must enforce
+            # both caller ACLs and metadata restrictions before top-k.
+            matches = (self._router.search(routed[index], caller=caller, limit=20,
+                                           metadata_filters=plan.metadata_filters)
+                       if self._router is not None else
+                       self._retriever.search(retrieval_query, limit=20, caller=caller))
+            for chunk in matches:
                 current = candidate_by_id.get(chunk.chunk_id)
                 if current is None or chunk.retrieval_score > current.retrieval_score:
                     candidate_by_id[chunk.chunk_id] = chunk

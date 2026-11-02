@@ -16,7 +16,7 @@ A system can be inexpensive per model call and still be expensive per accepted r
 
 My goal is to make the management layer selective. If a task is an exact lookup, dependency check, budget calculation, or test-result comparison, a conventional deterministic tool may be the better choice. Use a language model when the work actually requires interpretation, synthesis, or generation.
 
-That is a design principle, not a claim that deterministic software can solve every executive problem.
+The boundary is practical: deterministic software handles exact, verifiable work. Judgment-heavy assignments still need model capabilities and independent review.
 
 ## Start with the lowest sufficient cost
 
@@ -24,7 +24,7 @@ Director of Staff separates several responsibilities that are too often bundled 
 
 The scheduler tracks task state and dependencies. Deterministic tools handle narrowly defined, verifiable work. Local open-weight models are available for bounded reasoning tasks. Review gates hold outputs that need an accountable human decision.
 
-The objective is not to replace strong frontier models. It is to use them deliberately, when the additional capability justifies the cost and the relevant data and action permissions have been approved.
+Frontier models still have an important role. I want to call them deliberately, when their additional capability justifies the cost and the relevant data and action permissions have been approved.
 
 For local inference, the absence of a metered commercial API bill does not mean the work is free. Hardware, electricity, infrastructure, maintenance, time, and human review all count.
 
@@ -34,9 +34,9 @@ For local inference, the absence of a metered commercial API bill does not mean 
 
 My development environment uses Windows, a persistent SQLite work queue, local Ollama models, and separately controlled execution and review workflows.
 
-One controlled ten-work-order integration test initially required six local model calls. After adding a source-aware deterministic resolver, a comparable rerun used two calls while correctly resolving two structured questions that the earlier model route had mishandled.
+On the same ten work orders, after I added a source-aware resolver specifically built in response to two earlier failures, the rerun used two model calls instead of six. Both structured questions were resolved correctly. That is encouraging for those known cases, but it is not independent validation. The resolver still needs testing on previously unseen work orders.
 
-That was a promising result for those cases. It was not a customer study and does not establish a general 67% reduction in cost.
+In a seven-stage engineering workflow, two stages called a local model: planning the change and writing the code. One real run used 4,579 tokens over 42.5 seconds, with no commercial API charges. Its available tests passed, but I rejected the proposed patch during human review. It did not produce an accepted engineering result.
 
 The broader testing also surfaced important failures.
 
@@ -55,7 +55,7 @@ The approach I am developing asks four questions of every work order:
 3. **What dependencies, restrictions, or uncertainties must be resolved first?**
 4. **Who has authority to approve the outcome or an external action?**
 
-A failed or rejected prerequisite cannot simply be counted as completed so that the workflow appears productive. A human decision does not become a cryptographic signature merely because a hash is recorded. A model should not be allowed to turn its own written instructions into system authorization.
+A failed or rejected prerequisite cannot simply be counted as completed so that the workflow appears productive. A recorded approval documents a person's decision; it does not establish that the decision was correct. A model should not be allowed to turn its own written instructions into system authorization.
 
 This is why I am also developing APEX as a separate governance architecture for identity, authorization, execution boundaries, and audit evidence. The intended separation is that Director manages and evaluates work while independent controls determine what actions are permitted. Live, enterprise-scale integration remains a future validation milestone.
 
@@ -69,13 +69,13 @@ You can see it here:
 
 **[Director of Staff: Executive Workflow Method](https://github.com/phasselbring/enterprise-ai-patterns/tree/main/skills/director-of-staff-executive-workflow)**
 
-The public skill is intentionally a *methodology*, not the proprietary Director orchestration platform. Its instructions cannot independently enforce access control, approve work, or guarantee an agent will behave correctly. Real enforcement requires tested application code and a controlled environment.
+The public skill shares a *methodology*. NPM's proprietary Director orchestration platform remains private. Instructions cannot independently enforce access control, approve work, or guarantee an agent will behave correctly. Real enforcement requires tested application code and a controlled environment.
 
 That distinction is part of the point.
 
 ## The next business test
 
-The next step is not another headline benchmark. It is a small prospective pilot using real, authorized work with acceptance criteria defined in advance.
+The next step is a small prospective pilot using real, authorized work with acceptance criteria defined in advance.
 
 I want to measure how many work orders are accepted, how much human preparation and review they require, how often models need repair or escalation, and how much the complete workflow costs.
 
@@ -89,7 +89,7 @@ If organizations can coordinate specialized AI capabilities while controlling in
 
 Through NPM Technologies, I am interested in talking with CIOs, enterprise architects, AI engineering leaders, and founders who want to measure these trade-offs in a bounded pilot.
 
-Learn more at **[NPM Technologies](https://npmit.com/)** and explore the **[public executive workflow skill](https://github.com/phasselbring/enterprise-ai-patterns/tree/main/skills/director-of-staff-executive-workflow)**.
+You can explore the **[public executive workflow skill](https://github.com/phasselbring/enterprise-ai-patterns/tree/main/skills/director-of-staff-executive-workflow)** and its templates now. Contact NPM Technologies about evaluating a bounded pilot.
 
 **What is the biggest hidden cost in your agentic AI workflows today: inference, coordination, rework, or human review?**
 

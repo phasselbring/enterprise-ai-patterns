@@ -6,7 +6,7 @@ But there is an economic question behind that vision:
 
 **How much intelligence should we pay for before a work order produces a result someone can actually accept?**
 
-That question led me to develop Director of Staff at NPM Technologies.
+That question led me to develop [Director of Staff](https://npmit.com/director-of-staff/) at NPM Technologies.
 
 ## The cost of coordination
 
@@ -89,7 +89,9 @@ If organizations can coordinate specialized AI capabilities while controlling in
 
 Through NPM Technologies, I am interested in talking with CIOs, enterprise architects, AI engineering leaders, and founders who want to measure these trade-offs in a bounded pilot.
 
-You can explore the **[public executive workflow skill](https://github.com/phasselbring/enterprise-ai-patterns/tree/main/skills/director-of-staff-executive-workflow)** and its templates now. Contact NPM Technologies about evaluating a bounded pilot.
+**Explore Director of Staff and discuss a bounded pilot:** [NPM Technologies Director of Staff](https://npmit.com/director-of-staff/).
+
+**Explore the public Executive Workflow Skill:** [Director of Staff Executive Workflow Method](https://github.com/phasselbring/enterprise-ai-patterns/tree/main/skills/director-of-staff-executive-workflow).
 
 **What is the biggest hidden cost in your agentic AI workflows today: inference, coordination, rework, or human review?**
 
